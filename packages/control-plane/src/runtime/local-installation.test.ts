@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
+import { assertTrue } from "@effect/vitest/utils";
 import * as Effect from "effect/Effect";
 
 import { createSqlControlPlaneRuntime } from "./index";
@@ -23,9 +24,9 @@ describe("local-installation", () => {
         installation.workspaceId,
       );
 
-      expect(account._tag).toBe("Some");
-      expect(organization._tag).toBe("Some");
-      expect(workspace._tag).toBe("Some");
+      assertTrue(account._tag === "Some");
+      assertTrue(organization._tag === "Some");
+      assertTrue(workspace._tag === "Some");
     }),
   );
 

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "@effect/vitest";
+import { assertInstanceOf, assertNone, assertTrue } from "@effect/vitest/utils";
 import * as Effect from "effect/Effect";
 import * as Fiber from "effect/Fiber";
-import * as Option from "effect/Option";
+
 import * as Schema from "effect/Schema";
 import * as TestClock from "effect/TestClock";
 
@@ -118,11 +119,9 @@ describe("codemode-core", () => {
         }),
       );
 
-      expect(pendingError).toBeInstanceOf(ToolInteractionPendingError);
-      if (pendingError instanceof ToolInteractionPendingError) {
-        expect(pendingError.path).toBe("issues.create");
-        expect(pendingError.elicitation.mode).toBe("form");
-      }
+      assertInstanceOf(pendingError, ToolInteractionPendingError);
+      expect(pendingError.path).toBe("issues.create");
+      expect(pendingError.elicitation.mode).toBe("form");
     }),
   );
 
@@ -193,11 +192,11 @@ describe("codemode-core", () => {
 
       yield* TestClock.adjust("200 seconds");
       const firstPoll = yield* Fiber.poll(fiber);
-      expect(Option.isNone(firstPoll)).toBe(true);
+      assertNone(firstPoll);
 
       yield* TestClock.adjust("200 seconds");
       const secondPoll = yield* Fiber.poll(fiber);
-      expect(Option.isNone(secondPoll)).toBe(true);
+      assertNone(secondPoll);
 
       yield* TestClock.adjust("200 seconds");
       const output = yield* Fiber.join(fiber);
@@ -237,10 +236,8 @@ describe("codemode-core", () => {
         }),
       );
 
-      expect(declinedError).toBeInstanceOf(ToolInteractionDeniedError);
-      if (declinedError instanceof ToolInteractionDeniedError) {
-        expect(declinedError.reason).toContain("User declined");
-      }
+      assertInstanceOf(declinedError, ToolInteractionDeniedError);
+      expect(declinedError.reason).toContain("User declined");
     }),
   );
 
@@ -277,13 +274,9 @@ describe("codemode-core", () => {
         }),
       );
 
-      expect(failure._tag).toBe("Left");
-      if (failure._tag === "Left") {
-        expect(failure.left).toBeInstanceOf(Error);
-        if (failure.left instanceof Error) {
-          expect(failure.left.message).toContain("Input validation failed");
-        }
-      }
+      assertTrue(failure._tag === "Left");
+      assertInstanceOf(failure.left, Error);
+      expect(failure.left.message).toContain("Input validation failed");
     }),
   );
 

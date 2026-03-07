@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
+import { assertInstanceOf, assertTrue } from "@effect/vitest/utils";
 import { AccountIdSchema, WorkspaceIdSchema } from "#schema";
 import * as Effect from "effect/Effect";
 
@@ -75,10 +76,8 @@ describe("control-plane-domain actor", () => {
         }),
       );
 
-      expect(denied._tag).toBe("Left");
-      if (denied._tag === "Left") {
-        expect(denied.left).toBeInstanceOf(ActorForbiddenError);
-      }
+      assertTrue(denied._tag === "Left");
+      assertInstanceOf(denied.left, ActorForbiddenError);
     }),
   );
 
@@ -92,10 +91,8 @@ describe("control-plane-domain actor", () => {
         }),
       );
 
-      expect(result._tag).toBe("Left");
-      if (result._tag === "Left") {
-        expect(result.left).toBeInstanceOf(ActorUnauthenticatedError);
-      }
+      assertTrue(result._tag === "Left");
+      assertInstanceOf(result.left, ActorUnauthenticatedError);
     }),
   );
 });

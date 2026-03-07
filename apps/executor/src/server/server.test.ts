@@ -9,6 +9,7 @@ import {
   OpenApi,
 } from "@effect/platform";
 import { describe, expect, it } from "@effect/vitest";
+import { assertInstanceOf, assertTrue } from "@effect/vitest/utils";
 import * as Effect from "effect/Effect";
 import * as Schema from "effect/Schema";
 
@@ -761,7 +762,7 @@ describe("local-executor-server", () => {
           redirect: "follow",
         }),
       );
-      expect(callbackResponse.ok).toBe(true);
+      assertTrue(callbackResponse.ok);
       expect(yield* Effect.promise(() => callbackResponse.text())).toContain("Source connected:");
 
       const completed = yield* waitForExecutionCompletion({
@@ -846,11 +847,9 @@ describe("local-executor-server", () => {
         })
         .pipe(Effect.flip);
 
-      expect(failure).toBeInstanceOf(ControlPlaneStorageError);
-      if (failure instanceof ControlPlaneStorageError) {
-        expect(failure.operation).toBe("executions.create.environment");
-        expect(failure.message).toContain("Failed creating MCP connector");
-      }
+      assertInstanceOf(failure, ControlPlaneStorageError);
+      expect(failure.operation).toBe("executions.create.environment");
+      expect(failure.message).toContain("Failed creating MCP connector");
     }),
   );
 });

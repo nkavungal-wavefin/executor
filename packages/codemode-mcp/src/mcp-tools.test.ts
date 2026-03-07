@@ -2,6 +2,7 @@ import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { describe, expect, it } from "@effect/vitest";
+import { assertInstanceOf, assertTrue } from "@effect/vitest/utils";
 import * as Effect from "effect/Effect";
 import { z } from "zod/v4";
 
@@ -289,11 +290,9 @@ describe("codemode-mcp", () => {
         }),
       );
 
-      expect(outcome._tag).toBe("Left");
-      if (outcome._tag === "Left") {
-        expect(outcome.left).toBeInstanceOf(McpToolsError);
-        expect(outcome.left.stage).toBe("list_tools");
-      }
+      assertTrue(outcome._tag === "Left");
+      assertInstanceOf(outcome.left, McpToolsError);
+      expect(outcome.left.stage).toBe("list_tools");
     }),
   );
 });

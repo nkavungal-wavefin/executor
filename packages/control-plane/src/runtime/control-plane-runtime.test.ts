@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
+import { assertTrue } from "@effect/vitest/utils";
 import * as Effect from "effect/Effect";
 
 import type { AccountId } from "#schema";
@@ -138,7 +139,7 @@ describe("control-plane-runtime", () => {
         ),
       );
 
-      expect(orgOne.id.length > 0).toBe(true);
+      assertTrue(orgOne.id.length > 0);
       expect(getOtherOrgError._tag).toBe("ControlPlaneNotFoundError");
     }),
   );
@@ -221,7 +222,7 @@ describe("control-plane-runtime", () => {
             }),
         ),
       );
-      expect(orgA.id.length > 0).toBe(true);
+      assertTrue(orgA.id.length > 0);
       expect(patchOtherOrgError._tag).toBe("ControlPlaneForbiddenError");
 
       const deleteOtherOrgError = yield* expectLeft(
@@ -312,7 +313,7 @@ describe("control-plane-runtime", () => {
             path: { organizationId: organization.id },
           }),
       );
-      expect(deleteOrg.removed).toBe(true);
+      assertTrue(deleteOrg.removed);
 
       const listStaleWorkspacesError = yield* expectLeft(
         withControlPlaneClient(

@@ -6,6 +6,7 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { describe, expect, it } from "@effect/vitest";
+import { assertTrue } from "@effect/vitest/utils";
 import * as Effect from "effect/Effect";
 import { z } from "zod/v4";
 
@@ -316,7 +317,7 @@ describe("execution-mcp-resume", () => {
         created.execution.id,
       );
 
-      expect(pendingInteraction._tag).toBe("Some");
+      assertTrue(pendingInteraction._tag === "Some");
       if (pendingInteraction._tag === "Some") {
         expect(pendingInteraction.value.kind).toBe("form");
         expect(pendingInteraction.value.payloadJson).toContain("Approve gated echo");

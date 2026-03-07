@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
+import { throws } from "@effect/vitest/utils";
 import * as Schema from "effect/Schema";
 
 import {
@@ -65,22 +66,22 @@ describe("control-plane payload schemas", () => {
   });
 
   it("rejects blank strings for normalized string fields", () => {
-    expect(() =>
+    throws(() =>
       Schema.decodeUnknownSync(CreateOrganizationPayloadSchema)({
         name: "   ",
       })
-    ).toThrow();
+    );
 
-    expect(() =>
+    throws(() =>
       Schema.decodeUnknownSync(UpdateOrganizationPayloadSchema)({
         name: "   ",
       })
-    ).toThrow();
+    );
 
-    expect(() =>
+    throws(() =>
       Schema.decodeUnknownSync(UpdateSourcePayloadSchema)({
         endpoint: "   ",
       })
-    ).toThrow();
+    );
   });
 });

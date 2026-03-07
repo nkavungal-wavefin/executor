@@ -6,10 +6,14 @@ import {
   HttpApiEndpoint,
   HttpApiGroup,
   HttpApiSchema,
+  HttpClient,
+  HttpClientResponse,
   OpenApi,
 } from "@effect/platform";
 import * as NodeHttpServer from "@effect/platform-node/NodeHttpServer";
 import { describe, expect, it } from "@effect/vitest";
+import { assertInclude, assertTrue } from "@effect/vitest/utils";
+
 import * as Effect from "effect/Effect";
 import * as Layer from "effect/Layer";
 import { Schema } from "effect";
@@ -372,9 +376,9 @@ describe("openapi-tools", () => {
         }),
       );
 
-      expect(missingBody._tag).toBe("Left");
+      assertTrue(missingBody._tag === "Left");
       if (missingBody._tag === "Left" && missingBody.left instanceof Error) {
-        expect(missingBody.left.message).toContain("Missing required request body");
+        assertInclude(missingBody.left.message, "Missing required request body");
       }
 
       expect(
@@ -386,6 +390,58 @@ describe("openapi-tools", () => {
         "/repos/octocat/hello-world/issues",
       ]);
       expect(server.requests[0]?.query).toContain("include=all");
+    }),
+  );
+
+  it.effect("preserves base-path URLs when invoking tools", () =>
+    Effect.gen(function* () {
+      const manifest = yield* extractOpenApiManifest("generated", generatedOpenApiSpec);
+      let capturedUrl: string | null = null;
+      const httpClientLayer = Layer.succeed(
+        HttpClient.HttpClient,
+        HttpClient.make((request, url) =>
+          Effect.sync(() => {
+            capturedUrl = url.toString();
+
+            return HttpClientResponse.fromWeb(
+              request,
+              new Response(
+                JSON.stringify({
+                  full_name: "octocat/hello-world",
+                  include: null,
+                }),
+                {
+                  status: 200,
+                  headers: {
+                    "content-type": "application/json",
+                  },
+                },
+              ),
+            );
+          })
+        ),
+      );
+      const tools = createOpenApiToolsFromManifest({
+        manifest,
+        baseUrl: "https://example.com/api/v3",
+        namespace: "source.generated",
+        httpClientLayer,
+      });
+      const getRepo = resolveToolExecutor(tools, "source.generated.repos.getRepo");
+      const result = yield* Effect.promise(() =>
+        getRepo({ owner: "octocat", repo: "hello-world" }),
+      );
+
+      expect(result).toEqual({
+        status: 200,
+        headers: expect.any(Object),
+        body: {
+          full_name: "octocat/hello-world",
+          include: null,
+        },
+      });
+
+      expect(capturedUrl).toBe("https://example.com/api/v3/repos/octocat/hello-world");
     }),
   );
 

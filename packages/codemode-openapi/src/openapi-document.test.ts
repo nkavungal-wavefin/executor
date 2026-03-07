@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
+import { assertInclude, assertTrue } from "@effect/vitest/utils";
 import * as Effect from "effect/Effect";
 
 import { parseOpenApiDocument } from "./openapi-document";
@@ -41,9 +42,9 @@ describe("openapi-document", () => {
         }),
       );
 
-      expect(outcome._tag).toBe("Left");
+      assertTrue(outcome._tag === "Left");
       if (outcome._tag === "Left" && outcome.left instanceof Error) {
-        expect(outcome.left.message).toContain("OpenAPI document is empty");
+        assertInclude(outcome.left.message, "OpenAPI document is empty");
       }
     }),
   );

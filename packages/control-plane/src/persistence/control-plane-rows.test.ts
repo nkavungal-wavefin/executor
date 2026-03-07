@@ -1,4 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
+import { assertTrue } from "@effect/vitest/utils";
 import {
   AccountIdSchema,
   OrganizationIdSchema,
@@ -92,7 +93,7 @@ describe("control-plane-persistence-drizzle", () => {
       });
 
       const workspace = yield* persistence.rows.workspaces.getById(workspaceId);
-      expect(Option.isSome(workspace)).toBe(true);
+      assertTrue(Option.isSome(workspace));
 
       const sources = yield* persistence.rows.sources.listByWorkspaceId(workspaceId);
       expect(sources).toHaveLength(1);
@@ -142,7 +143,7 @@ describe("control-plane-persistence-drizzle", () => {
         accountId,
       );
 
-      expect(Option.isSome(membership)).toBe(true);
+      assertTrue(Option.isSome(membership));
       if (Option.isSome(membership)) {
         expect(membership.value.role).toBe("admin");
       }
