@@ -9,11 +9,11 @@ import {
 const asToolPath = (value: string): ToolPath => value as ToolPath;
 
 const catalog: ToolCatalog = {
-  listNamespaces() {
+  listNamespaces({ limit }) {
     return Effect.succeed([
       { namespace: "src_api", displayName: "API Sources", toolCount: 6800 },
       { namespace: "src_mcp", displayName: "MCP Sources", toolCount: 3200 },
-    ]);
+    ].slice(0, limit));
   },
   listTools({ namespace }) {
     return Effect.succeed([
@@ -34,6 +34,9 @@ const catalog: ToolCatalog = {
       inputType: "object",
       outputType: "object",
     });
+  },
+  getSchemaBundle() {
+    return Effect.succeed(null);
   },
   searchTools({ limit }) {
     return Effect.succeed(

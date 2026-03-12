@@ -6,7 +6,7 @@
   "workspaces": [
     "packages/*",
     "apps/*",
-    "docs"
+    "apps/docs"
   ],
   "catalog": {
     "@effect/cli": "^0.73.2",

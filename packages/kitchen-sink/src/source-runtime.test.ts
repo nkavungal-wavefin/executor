@@ -287,6 +287,10 @@ const resolveSourceCallContext = (input: {
       return { auth: { kind: "none" } };
     }
 
+    if (source.auth.kind === "oauth2_authorized_user") {
+      throw new Error("oauth2_authorized_user auth requires persistence-backed runtime resolution");
+    }
+
     const tokenRef = source.auth.kind === "bearer"
       ? source.auth.token
       : source.auth.accessToken;
@@ -494,11 +498,11 @@ const openApiSource = (input: {
   status: "connected",
   enabled: true,
   namespace: input.namespace ?? null,
-  transport: null,
-  queryParams: null,
-  headers: null,
-  specUrl: input.specUrl ?? null,
-  defaultHeaders: null,
+  bindingVersion: 1,
+  binding: {
+    specUrl: input.specUrl ?? null,
+    defaultHeaders: null,
+  },
   importAuthPolicy: "reuse_runtime",
   importAuth: { kind: "none" },
   auth: input.auth,

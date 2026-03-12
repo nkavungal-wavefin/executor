@@ -1172,6 +1172,7 @@ export function AddSourcePage() {
                     <>
                       <Field label="OAuth client ID" className="sm:col-span-2">
                         <TextInput
+                          type="password"
                           value={connectForm.oauthClientId}
                           onChange={(v) => setFormField("oauthClientId", v)}
                           placeholder="1234567890-abcdef.apps.googleusercontent.com"
@@ -1179,6 +1180,7 @@ export function AddSourcePage() {
                       </Field>
                       <Field label="OAuth client secret" className="sm:col-span-2">
                         <TextInput
+                          type="password"
                           value={connectForm.oauthClientSecret}
                           onChange={(v) => setFormField("oauthClientSecret", v)}
                           placeholder="GOCSPX-..."
@@ -1324,6 +1326,7 @@ function Field(props: {
 }
 
 function TextInput(props: {
+  type?: "text" | "password";
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
@@ -1331,6 +1334,7 @@ function TextInput(props: {
 }) {
   return (
     <input
+      type={props.type || "text"}
       value={props.value}
       onChange={(event) => props.onChange(event.target.value)}
       placeholder={props.placeholder}
