@@ -67,13 +67,12 @@ const ensureRuntimeCatalogSyncWorkspace = (
   scopeId: Source["scopeId"],
 ) =>
   Effect.gen(function* () {
-  if (deps.runtimeLocalScope.installation.scopeId !== scopeId) {
-    return yield* Effect.fail(
-      runtimeEffectError("catalog/source/sync", 
+    if (deps.runtimeLocalScope.installation.scopeId !== scopeId) {
+      return yield* runtimeEffectError(
+        "catalog/source/sync",
         `Runtime local scope mismatch: expected ${scopeId}, got ${deps.runtimeLocalScope.installation.scopeId}`,
-      ),
-    );
-  }
+      );
+    }
   });
 
 const syncSourceCatalogWithDeps = (

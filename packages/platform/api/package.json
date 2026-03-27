@@ -20,7 +20,7 @@
     "./executions/http": "./src/executions/http.ts"
   },
   "scripts": {
-    "test": "vitest run",
+    "test": "vitest run --passWithNoTests",
     "test:watch": "vitest",
     "typecheck": "bunx tsc --noEmit -p tsconfig.json"
   },

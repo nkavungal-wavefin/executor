@@ -3,9 +3,7 @@ import * as Effect from "effect/Effect";
 import type {
   ScopeId,
   Execution,
-  ExecutionEnvelope,
   LocalInstallation,
-  LocalScopePolicy,
   Source,
 } from "./schema";
 import type {
@@ -14,12 +12,8 @@ import type {
 } from "./executions/contracts";
 import type {
   CreateSecretPayload,
-  CreateSecretResult,
   DeleteSecretResult,
-  InstanceConfig,
-  SecretListItem,
   UpdateSecretPayload,
-  UpdateSecretResult,
 } from "./local/contracts";
 import {
   getLocalInstallation,
@@ -60,8 +54,6 @@ import {
   provideExecutorRuntime,
   type ExecutorRuntime,
   type ExecutorRuntimeOptions,
-  type ResolveExecutionEnvironment,
-  type ResolveSecretMaterial,
 } from "./runtime";
 import {
   createExecution,

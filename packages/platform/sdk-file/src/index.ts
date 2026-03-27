@@ -29,7 +29,6 @@ import {
   type ResolveSecretMaterial,
 } from "@executor/platform-sdk/runtime";
 import * as Effect from "effect/Effect";
-import type { LocalToolRuntime } from "../../sdk/src/runtime/local-tool-runtime";
 import {
   type LoadedLocalExecutorConfig,
   type ResolvedLocalWorkspaceContext,

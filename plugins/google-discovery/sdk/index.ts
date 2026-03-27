@@ -15,6 +15,7 @@ import {
   SecretMaterialStorerService,
   SecretMaterialUpdaterService,
   provideExecutorRuntime,
+  runtimeEffectError,
 } from "@executor/platform-sdk/runtime";
 import {
   GOOGLE_DISCOVERY_EXECUTOR_KEY,
@@ -135,10 +136,6 @@ const GoogleDiscoveryExecutorAddInputSchema = Schema.Struct({
 
 type GoogleDiscoveryExecutorAddInput =
   typeof GoogleDiscoveryExecutorAddInputSchema.Type;
-type GoogleDiscoveryOAuthAuth = Extract<
-  GoogleDiscoveryConnectionAuth,
-  { kind: "oauth2" }
->;
 
 const GOOGLE_AUTHORIZATION_ENDPOINT = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_ENDPOINT = "https://oauth2.googleapis.com/token";
@@ -425,7 +422,7 @@ const resolveGoogleAuthHeaders = (input: {
   Effect.gen(function* () {
     if (input.stored.auth.kind === "none") {
       return {
-        ...(input.stored.defaultHeaders ?? {}),
+        ...input.stored.defaultHeaders,
       };
     }
 
@@ -435,7 +432,7 @@ const resolveGoogleAuthHeaders = (input: {
         ref: input.stored.auth.tokenSecretRef,
       });
       return {
-        ...(input.stored.defaultHeaders ?? {}),
+        ...input.stored.defaultHeaders,
         authorization: `Bearer ${token.trim()}`,
       };
     }
@@ -448,7 +445,7 @@ const resolveGoogleAuthHeaders = (input: {
     });
 
     return {
-      ...(input.stored.defaultHeaders ?? {}),
+      ...input.stored.defaultHeaders,
       authorization: `Bearer ${token.trim()}`,
     };
   });
@@ -490,39 +487,6 @@ const normalizeBatchSourceInput = (
       || defaultGoogleDiscoveryUrl(input.service, input.version),
     defaultHeaders: input.defaultHeaders,
     scopes: [...new Set(input.scopes.map((scope) => scope.trim()).filter(Boolean))],
-  });
-
-const createOAuthSourceData = (input: {
-  service: string;
-  version: string;
-  discoveryUrl: string;
-  defaultHeaders: Record<string, string> | null;
-  scopes: ReadonlyArray<string>;
-  clientId: string;
-  clientSecretRef: GoogleDiscoveryOAuthAuth["clientSecretRef"];
-  clientAuthentication: GoogleDiscoveryOAuthAuth["clientAuthentication"];
-  accessTokenRef: GoogleDiscoveryOAuthAuth["accessTokenRef"];
-  refreshTokenRef: GoogleDiscoveryOAuthAuth["refreshTokenRef"];
-  expiresAt: number | null;
-}): GoogleDiscoveryStoredSourceData =>
-  decodeStoredSourceData({
-    service: input.service,
-    version: input.version,
-    discoveryUrl: input.discoveryUrl,
-    defaultHeaders: input.defaultHeaders,
-    scopes: [...input.scopes],
-    auth: {
-      kind: "oauth2",
-      clientId: input.clientId,
-      clientSecretRef: input.clientSecretRef,
-      clientAuthentication: input.clientAuthentication,
-      authorizationEndpoint: GOOGLE_AUTHORIZATION_ENDPOINT,
-      tokenEndpoint: GOOGLE_TOKEN_ENDPOINT,
-      scopes: [...input.scopes],
-      accessTokenRef: input.accessTokenRef,
-      refreshTokenRef: input.refreshTokenRef,
-      expiresAt: input.expiresAt,
-    },
   });
 
 const resolveScopesForBatchSource = (input: {
@@ -682,8 +646,9 @@ export const googleDiscoverySdkPlugin = (options: {
       invoke: (input) =>
         Effect.gen(function* () {
           if (input.stored === null) {
-            return yield* Effect.fail(
-              new Error(`Google Discovery source storage missing for ${input.source.id}`),
+            return yield* runtimeEffectError(
+              "plugins/google-discovery/sdk",
+              `Google Discovery source storage missing for ${input.source.id}`,
             );
           }
 
@@ -841,8 +806,9 @@ export const googleDiscoverySdkPlugin = (options: {
               normalizeBatchSourceInput(source)
             );
             if (normalizedSources.length === 0) {
-              return yield* Effect.fail(
-                new Error("Select at least one Google API to connect."),
+              return yield* runtimeEffectError(
+                "plugins/google-discovery/sdk",
+                "Select at least one Google API to connect.",
               );
             }
 
@@ -897,20 +863,23 @@ export const googleDiscoverySdkPlugin = (options: {
         provideRuntime(
           Effect.gen(function* () {
             if (input.error) {
-              return yield* Effect.fail(
-                new Error(
-                  input.errorDescription || input.error || "Google OAuth failed",
-                ),
+              return yield* runtimeEffectError(
+                "plugins/google-discovery/sdk",
+                input.errorDescription || input.error || "Google OAuth failed",
               );
             }
             if (!input.code) {
-              return yield* Effect.fail(new Error("Missing Google OAuth code."));
+              return yield* runtimeEffectError(
+                "plugins/google-discovery/sdk",
+                "Missing Google OAuth code.",
+              );
             }
 
             const session = yield* options.oauthSessions.get(input.state);
             if (session === null) {
-              return yield* Effect.fail(
-                new Error(`Google OAuth session not found: ${input.state}`),
+              return yield* runtimeEffectError(
+                "plugins/google-discovery/sdk",
+                `Google OAuth session not found: ${input.state}`,
               );
             }
 

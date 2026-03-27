@@ -3,7 +3,6 @@ import type {
   ToolDescriptor as CatalogToolDescriptor,
 } from "@executor/codemode-core";
 import type { Capability, CatalogV1, Executable } from "@executor/ir/model";
-import type { SourceCatalogSyncResult } from "./catalog-sync-result";
 import type {
   Source,
 } from "./source-models";

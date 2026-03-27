@@ -30,7 +30,6 @@ import {
   GOOGLE_DISCOVERY_OAUTH_STORAGE_PREFIX,
   GOOGLE_DISCOVERY_PLUGIN_KEY,
   GoogleDiscoveryConnectInputSchema,
-  GoogleDiscoveryOAuthPopupResultSchema,
   GoogleDiscoverySourceConfigPayloadSchema,
   GoogleDiscoveryStartOAuthInputSchema,
   GoogleDiscoveryStartOAuthResultSchema,
@@ -150,13 +149,6 @@ export const googleDiscoveryHttpApiExtension = {
 } satisfies ExecutorHttpApiExtension<typeof GoogleDiscoveryHttpGroup>;
 
 const GoogleDiscoveryHttpApi = HttpApi.make("executor").add(GoogleDiscoveryHttpGroup);
-
-const toBadRequestError = (operation: string, cause: unknown) =>
-  new ControlPlaneBadRequestError({
-    operation,
-    message: cause instanceof Error ? cause.message : String(cause),
-    details: cause instanceof Error ? cause.stack ?? cause.message : String(cause),
-  });
 
 const toStorageError = (operation: string, cause: unknown) =>
   new ControlPlaneStorageError({

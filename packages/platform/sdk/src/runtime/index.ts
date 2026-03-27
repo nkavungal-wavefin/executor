@@ -68,7 +68,6 @@ import {
   LocalToolRuntimeLoaderService,
 } from "./local-tool-runtime";
 import {
-  InstallationStore,
   makeLocalStorageLayer,
   type InstallationStoreShape,
   type SourceArtifactStoreShape,
@@ -93,13 +92,19 @@ export * from "./execution/state";
 export * from "./sources/executor-tools";
 export * from "./execution/live";
 export * from "./catalog/schema-type-signature";
+export * from "./catalog/catalog-typescript";
 export * from "./catalog/source/runtime";
 export * from "./catalog/source/sync";
 export * from "./sources/source-store";
 export * from "./executor-state-store";
+export * from "./effect-errors";
 export * from "./execution/scope/environment";
 export * from "../sources/inspection";
 export * from "./execution/service";
+export * from "./source-artifacts";
+export * from "./scope-config";
+export * from "./scope-state";
+export * from "./scope/config-secrets";
 export {
   LocalInstanceConfigService,
   SecretMaterialDeleterService,
@@ -111,9 +116,25 @@ export type {
   DeleteSecretMaterial,
   ResolveInstanceConfig,
   ResolveSecretMaterial,
+  SecretMaterialResolveContext,
   StoreSecretMaterial,
   UpdateSecretMaterial,
 } from "./scope/secret-material-providers";
+export {
+  getRuntimeLocalScopeOption,
+  provideOptionalRuntimeLocalScope,
+  requireRuntimeLocalActorScopeId,
+  requireRuntimeLocalScope,
+  RuntimeLocalScopeService,
+} from "./scope/runtime-context";
+export type { RuntimeLocalScopeState } from "./scope/runtime-context";
+export {
+  LocalToolRuntimeLoaderService,
+} from "./local-tool-runtime";
+export type {
+  LocalToolRuntime,
+  LocalToolRuntimeLoaderShape,
+} from "./local-tool-runtime";
 export {
   registeredSourceContributions,
   hasRegisteredExternalSourcePlugins,

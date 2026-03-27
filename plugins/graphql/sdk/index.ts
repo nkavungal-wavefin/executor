@@ -17,6 +17,7 @@ import {
 import {
   SecretMaterialResolverService,
   provideExecutorRuntime,
+  runtimeEffectError,
 } from "@executor/platform-sdk/runtime";
 import {
   deriveGraphqlNamespace,
@@ -187,7 +188,7 @@ const resolveGraphqlHeaders = (
   Effect.gen(function* () {
     const bearerToken = yield* resolveBearerToken(stored.auth);
     return {
-      ...(stored.defaultHeaders ?? {}),
+      ...stored.defaultHeaders,
       ...(bearerToken && stored.auth.kind === "bearer"
         ? {
             [resolveBearerHeaderName(stored.auth)]:
@@ -431,8 +432,9 @@ export const graphqlSdkPlugin = (options: {
       invoke: (input) =>
         Effect.gen(function* () {
           if (input.stored === null) {
-            return yield* Effect.fail(
-              new Error(`GraphQL source storage missing for ${input.source.id}`),
+            return yield* runtimeEffectError(
+              "plugins/graphql/sdk",
+              `GraphQL source storage missing for ${input.source.id}`,
             );
           }
 

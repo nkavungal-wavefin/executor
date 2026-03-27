@@ -433,9 +433,11 @@ export const shapeToJsonSchema = (catalog: CatalogV1, rootShapeId: string): unkn
       Match.when({ type: "conditional" }, (node) =>
         withDocs({
           if: buildInline(node.ifShapeId, [`${label}_if`]),
-          ...(node.thenShapeId
-            ? { then: buildInline(node.thenShapeId, [`${label}_then`]) }
-            : {}),
+          ...Object.fromEntries(
+            node.thenShapeId
+              ? [["then", buildInline(node.thenShapeId, [`${label}_then`])]]
+              : [],
+          ),
           ...(node.elseShapeId
             ? { else: buildInline(node.elseShapeId, [`${label}_else`]) }
             : {}),
@@ -743,13 +745,12 @@ const ensureRuntimeCatalogWorkspace = (
   scopeId: ScopeId,
 ) =>
   Effect.gen(function* () {
-  if (deps.runtimeLocalScope.installation.scopeId !== scopeId) {
-    return yield* Effect.fail(
-      runtimeEffectError("catalog/source/runtime",
+    if (deps.runtimeLocalScope.installation.scopeId !== scopeId) {
+      return yield* runtimeEffectError(
+        "catalog/source/runtime",
         `Runtime local scope mismatch: expected ${scopeId}, got ${deps.runtimeLocalScope.installation.scopeId}`,
-      ),
-    );
-  }
+      );
+    }
   });
 
 const buildSnapshotFromArtifact = (input: {

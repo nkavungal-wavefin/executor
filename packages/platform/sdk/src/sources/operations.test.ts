@@ -1,13 +1,9 @@
 import {
-  mkdtempSync,
-  rmSync,
-} from "node:fs";
+  FileSystem,
+} from "@effect/platform";
 import {
-  tmpdir,
-} from "node:os";
-import {
-  join,
-} from "node:path";
+  NodeFileSystem,
+} from "@effect/platform-node";
 import {
   describe,
   expect,
@@ -18,10 +14,13 @@ import * as Schema from "effect/Schema";
 
 import {
   createLocalExecutorEffect,
-} from "../../../sdk-file/src/index";
+} from "@executor/platform-sdk-file/effect";
 import {
   defineExecutorSourcePlugin,
 } from "../plugins";
+import {
+  runtimeEffectError,
+} from "../runtime/effect-errors";
 
 const BrokenSourceInputSchema = Schema.Struct({
   name: Schema.String,
@@ -97,8 +96,17 @@ const makeBrokenSourcePlugin = () => {
       },
       catalog: {
         kind: "imported",
-        sync: () => Effect.fail(new Error("sync boom")),
-        invoke: () => Effect.fail(new Error("invoke should not run in this test")),
+        sync: () =>
+          Effect.fail(
+            runtimeEffectError("sources/operations.test", "sync boom"),
+          ),
+        invoke: () =>
+          Effect.fail(
+            runtimeEffectError(
+              "sources/operations.test",
+              "invoke should not run in this test",
+            ),
+          ),
       },
     },
     extendExecutor: ({ source }) => ({
@@ -111,7 +119,10 @@ const makeBrokenSourcePlugin = () => {
 describe("source operations", () => {
   it.scoped("returns the errored source when source sync fails during create", () =>
     Effect.gen(function* () {
-      const workspaceRoot = mkdtempSync(join(tmpdir(), "executor-source-ops-"));
+      const fs = yield* FileSystem.FileSystem;
+      const workspaceRoot = yield* fs.makeTempDirectory({
+        prefix: "executor-source-ops-",
+      });
 
       const executor = yield* Effect.acquireRelease(
         createLocalExecutorEffect({
@@ -123,11 +134,9 @@ describe("source operations", () => {
           Effect.promise(() => executor.close()).pipe(
             Effect.orDie,
             Effect.zipRight(
-              Effect.sync(() => {
-                rmSync(workspaceRoot, {
-                  recursive: true,
-                  force: true,
-                });
+              fs.remove(workspaceRoot, {
+                recursive: true,
+                force: true,
               }),
             ),
           ),
@@ -143,6 +152,6 @@ describe("source operations", () => {
 
       expect(persisted.status).toBe("error");
       expect(persisted.name).toBe("Broken Source");
-    }),
+    }).pipe(Effect.provide(NodeFileSystem.layer)),
   );
 });

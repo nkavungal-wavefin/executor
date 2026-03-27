@@ -8,7 +8,7 @@ import type {
   SourceInspection,
   SourceInspectionToolDetail,
 } from "@executor/platform-sdk/schema";
-import { Badge, MethodBadge } from "./badge";
+import { MethodBadge } from "./badge";
 import { CodeBlock } from "./code-block";
 import { DocumentPanel } from "./document-panel";
 import { EmptyState, LoadableBlock } from "./loadable";

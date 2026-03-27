@@ -1,4 +1,6 @@
-import { readFileSync } from "node:fs";
+import { FileSystem } from "@effect/platform";
+import { NodeFileSystem } from "@effect/platform-node";
+import { fileURLToPath } from "node:url";
 
 import {
   describe,
@@ -42,9 +44,8 @@ import {
   extractOpenApiManifest,
 } from "../../../../../../plugins/openapi/sdk/extraction";
 
-const vercelFixture = readFileSync(
+const vercelFixturePath = fileURLToPath(
   new URL("../fixtures/vercel-openapi.json", import.meta.url),
-  "utf8",
 );
 
 const makeSource = (): Source => ({
@@ -91,6 +92,8 @@ const makeSourceRecord = (
 describe("openapi type contracts", () => {
   it.effect("resolves nested component refs in OpenAPI call contracts", () =>
     Effect.gen(function* () {
+      const fs = yield* FileSystem.FileSystem;
+      const vercelFixture = yield* fs.readFileString(vercelFixturePath, "utf8");
       const source = makeSource();
       const manifest = yield* extractOpenApiManifest(source.name, vercelFixture);
       const operations = compileOpenApiToolDefinitions(manifest).map(
@@ -163,5 +166,5 @@ describe("openapi type contracts", () => {
       expect(declaration).not.toContain("firstName: unknown;");
       expect(declaration).not.toContain("email: unknown;");
       expect(declaration).not.toContain("country: unknown;");
-    }));
+    }).pipe(Effect.provide(NodeFileSystem.layer)));
 });

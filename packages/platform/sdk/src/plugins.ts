@@ -12,6 +12,7 @@ import type {
   SourceInvokeResult,
 } from "@executor/source-core";
 import type * as Schema from "effect/Schema";
+import { runtimeEffectError } from "./runtime/effect-errors";
 
 export type PluginCleanup = {
   close: () => void | Promise<void>;
@@ -126,7 +127,7 @@ export type ExecutorSourcePluginDefinition<
   TConnectInput,
   TSourceConfig,
   TStored,
-  TUpdateInput extends {
+  _TUpdateInput extends {
     sourceId: string;
     config: TSourceConfig;
   },
@@ -229,8 +230,9 @@ const loadSourceOfKind = (
   Effect.gen(function* () {
     const source = yield* input.host.sources.get(sourceId);
     if (source.kind !== input.definition.kind) {
-      return yield* Effect.fail(
-        new Error(`Source ${sourceId} is not a ${input.definition.displayName} source.`),
+      return yield* runtimeEffectError(
+        "plugins",
+        `Source ${sourceId} is not a ${input.definition.displayName} source.`,
       );
     }
 
@@ -242,7 +244,7 @@ const createExecutorSourcePluginApi = <
   TConnectInput,
   TSourceConfig,
   TStored,
-  TUpdateInput extends {
+  _TUpdateInput extends {
     sourceId: string;
     config: TSourceConfig;
   },
@@ -252,10 +254,10 @@ const createExecutorSourcePluginApi = <
     TConnectInput,
     TSourceConfig,
     TStored,
-    TUpdateInput
+    _TUpdateInput
   >,
   host: ExecutorSourcePluginInternalHost,
-): ExecutorSourcePluginApi<TConnectInput, TSourceConfig, TUpdateInput> => ({
+): ExecutorSourcePluginApi<TConnectInput, TSourceConfig, _TUpdateInput> => ({
   getSource: (sourceId) =>
     loadSourceOfKind(sourceId, {
       definition,
@@ -272,8 +274,9 @@ const createExecutorSourcePluginApi = <
         sourceId: source.id,
       });
       if (stored === null) {
-        return yield* Effect.fail(
-          new Error(`${definition.displayName} source storage missing for ${source.id}`),
+        return yield* runtimeEffectError(
+          "plugins",
+          `${definition.displayName} source storage missing for ${source.id}`,
         );
       }
 

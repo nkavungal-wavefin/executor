@@ -38,7 +38,7 @@ export function SourceFavicon({
 }
 
 export function DefaultSourceIcon({
-  kind,
+  kind: _kind,
   className,
 }: {
   kind: SourceKind;

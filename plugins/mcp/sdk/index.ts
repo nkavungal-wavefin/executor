@@ -33,6 +33,7 @@ import {
   SecretMaterialStorerService,
   SecretMaterialUpdaterService,
   provideExecutorRuntime,
+  runtimeEffectError,
 } from "@executor/platform-sdk/runtime";
 import {
   McpConnectionAuthSchema,
@@ -240,20 +241,23 @@ const normalizeStoredSourceData = (
 
     if (stdio) {
       if (command === null) {
-        return yield* Effect.fail(
-          new Error("MCP stdio transport requires a command."),
+        return yield* runtimeEffectError(
+          "plugins/mcp/sdk",
+          "MCP stdio transport requires a command.",
         );
       }
 
       if (queryParams !== null) {
-        return yield* Effect.fail(
-          new Error("MCP stdio transport does not support query params."),
+        return yield* runtimeEffectError(
+          "plugins/mcp/sdk",
+          "MCP stdio transport does not support query params.",
         );
       }
 
       if (headers !== null) {
-        return yield* Effect.fail(
-          new Error("MCP stdio transport does not support request headers."),
+        return yield* runtimeEffectError(
+          "plugins/mcp/sdk",
+          "MCP stdio transport does not support request headers.",
         );
       }
 
@@ -271,14 +275,16 @@ const normalizeStoredSourceData = (
     }
 
     if (endpoint === null) {
-      return yield* Effect.fail(
-        new Error("MCP remote transports require an endpoint."),
+      return yield* runtimeEffectError(
+        "plugins/mcp/sdk",
+        "MCP remote transports require an endpoint.",
       );
     }
 
     if (command !== null || args !== null || env !== null || cwd !== null) {
-      return yield* Effect.fail(
-        new Error('MCP process settings require transport "stdio".'),
+      return yield* runtimeEffectError(
+        "plugins/mcp/sdk",
+        'MCP process settings require transport "stdio".',
       );
     }
 
@@ -380,8 +386,9 @@ const createPersistedMcpAuthProvider = (input: {
 }): Effect.Effect<OAuthClientProvider, Error, any> =>
   Effect.gen(function* () {
     if (input.stored.auth.kind !== "oauth2") {
-      return yield* Effect.fail(
-        new Error(`Source ${input.sourceId} is not configured for MCP OAuth.`),
+      return yield* runtimeEffectError(
+        "plugins/mcp/sdk",
+        `Source ${input.sourceId} is not configured for MCP OAuth.`,
       );
     }
 
@@ -732,8 +739,9 @@ export const mcpSdkPlugin = (
       invoke: (input) =>
         Effect.gen(function* () {
           if (input.stored === null) {
-            return yield* Effect.fail(
-              new Error(`MCP source storage missing for ${input.source.id}`),
+            return yield* runtimeEffectError(
+              "plugins/mcp/sdk",
+              `MCP source storage missing for ${input.source.id}`,
             );
           }
 
@@ -791,8 +799,9 @@ export const mcpSdkPlugin = (
               : entry;
 
           if (!definition) {
-            return yield* Effect.fail(
-              new Error(`Missing MCP tool definition for ${providerData.toolName}`),
+            return yield* runtimeEffectError(
+              "plugins/mcp/sdk",
+              `Missing MCP tool definition for ${providerData.toolName}`,
             );
           }
 
@@ -908,18 +917,23 @@ export const mcpSdkPlugin = (
         provideRuntime(
           Effect.gen(function* () {
         if (input.error) {
-          return yield* Effect.fail(
-            new Error(input.errorDescription || input.error || "MCP OAuth failed"),
+          return yield* runtimeEffectError(
+            "plugins/mcp/sdk",
+            input.errorDescription || input.error || "MCP OAuth failed",
           );
         }
         if (!input.code) {
-          return yield* Effect.fail(new Error("Missing MCP OAuth code."));
+          return yield* runtimeEffectError(
+            "plugins/mcp/sdk",
+            "Missing MCP OAuth code.",
+          );
         }
 
         const session = yield* options.oauthSessions.get(input.state);
         if (session === null) {
-          return yield* Effect.fail(
-            new Error(`MCP OAuth session not found: ${input.state}`),
+          return yield* runtimeEffectError(
+            "plugins/mcp/sdk",
+            `MCP OAuth session not found: ${input.state}`,
           );
         }
 

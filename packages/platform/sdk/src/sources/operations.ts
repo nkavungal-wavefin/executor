@@ -83,11 +83,9 @@ const syncArtifactsForSource = (input: {
             return erroredSource;
           }
 
-          return yield* Effect.fail(
-            input.operation.unknownStorage(
-              error,
-              "Failed syncing source tools",
-            ),
+          return yield* input.operation.unknownStorage(
+            error,
+            "Failed syncing source tools",
           );
         }),
     });

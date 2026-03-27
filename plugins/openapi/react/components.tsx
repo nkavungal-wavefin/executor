@@ -41,7 +41,7 @@ import type {
   OpenApiPreviewResponse,
   OpenApiSourceConfigPayload,
 } from "@executor/plugin-openapi-shared";
-import { startTransition, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { startTransition, useEffect, useState, type ReactNode } from "react";
 
 type RouteToolSearch = SourceToolExplorerSearch;
 

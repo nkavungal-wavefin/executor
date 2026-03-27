@@ -1,4 +1,6 @@
-import { readFileSync } from "node:fs";
+import { FileSystem } from "@effect/platform";
+import { NodeFileSystem } from "@effect/platform-node";
+import { fileURLToPath } from "node:url";
 
 import {
   describe,
@@ -39,15 +41,26 @@ const smokeFixtures = [
   },
 ] as const;
 
+const readFixtureString = (url: URL): Promise<string> =>
+  Effect.runPromise(
+    (Effect.gen(function* () {
+      const fs = yield* FileSystem.FileSystem;
+      return yield* fs.readFileString(fileURLToPath(url), "utf8");
+    }).pipe(Effect.provide(NodeFileSystem.layer)) as Effect.Effect<
+      string,
+      unknown,
+      never
+    >)
+  );
+
 describe("openapi smoke imports", () => {
   for (const fixture of smokeFixtures) {
     it(`imports ${fixture.name} end-to-end`, async () => {
+      const contentText = await readFixtureString(
+        new URL(fixture.fixture, import.meta.url),
+      );
       await Effect.runPromise(
         Effect.gen(function* () {
-          const contentText = readFileSync(
-            new URL(fixture.fixture, import.meta.url),
-            "utf8",
-        );
         const result = yield* buildOpenApiTestHarness({
           name: fixture.name,
           contentText,
@@ -78,24 +91,24 @@ describe("openapi smoke imports", () => {
   }
 
   it("resolves external relative refs through the extraction loader", async () => {
+    const rootUrl = new URL("./fixtures/openapi-external/root.yaml", import.meta.url);
+    const contentText = await readFixtureString(rootUrl);
     await Effect.runPromise(
       Effect.gen(function* () {
-        const rootUrl = new URL("./fixtures/openapi-external/root.yaml", import.meta.url);
-        const contentText = readFileSync(rootUrl, "utf8");
         const result = yield* buildOpenApiTestHarness({
-        name: "External Ref API",
-        contentText,
-        documentKey: rootUrl.toString(),
-        extraction: {
-          documentUrl: rootUrl.toString(),
-          loadDocument: async (url) => readFileSync(new URL(url), "utf8"),
-        },
-      });
+          name: "External Ref API",
+          contentText,
+          documentKey: rootUrl.toString(),
+          extraction: {
+            documentUrl: rootUrl.toString(),
+            loadDocument: (url) => readFixtureString(new URL(url)),
+          },
+        });
 
-      expect(result.manifest.tools).toHaveLength(1);
-      expect(result.tools).toHaveLength(1);
+        expect(result.manifest.tools).toHaveLength(1);
+        expect(result.tools).toHaveLength(1);
 
-      const contract = yield* buildLoadedSourceCatalogToolContract(result.tools[0]!);
+        const contract = yield* buildLoadedSourceCatalogToolContract(result.tools[0]!);
         expect(contract.input.typeDeclaration).toContain("widgetId: string;");
         expect(contract.output.typeDeclaration).toContain("type ExternalRefApiWidgetsGetResult");
         expect(contract.output.typeDeclaration).toContain("name: string;");

@@ -33,7 +33,7 @@ export const reconcileMissingSourceCatalogArtifacts = (input: {
   | RuntimeSourceCatalogSyncService
 > =>
   Effect.gen(function* () {
-    const runtimeLocalScope = yield* RuntimeLocalScopeService;
+    yield* RuntimeLocalScopeService;
     const sourceStore = yield* RuntimeSourceStoreService;
     const sourceArtifactStore = yield* SourceArtifactStore;
     const sourceCatalogSync = yield* RuntimeSourceCatalogSyncService;

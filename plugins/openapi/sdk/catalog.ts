@@ -47,7 +47,6 @@ import {
 import type {
   OpenApiHeader,
   OpenApiMediaContent,
-  OpenApiResponseVariant,
   OpenApiSecurityRequirement,
   OpenApiSecurityScheme,
   OpenApiToolProviderData,

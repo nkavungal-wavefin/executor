@@ -5,7 +5,6 @@ import {
   mergeToolCatalogs,
   mergeToolMaps,
   type ToolCatalog,
-  type ToolMap,
   type ToolInvoker,
 } from "@executor/codemode-core";
 import type {
@@ -57,7 +56,6 @@ import {
 } from "../ir-execution";
 import {
   authorizePersistedToolInvocation,
-  toSecretResolutionContext,
 } from "./authorization";
 import {
   provideRuntimeLocalScope,

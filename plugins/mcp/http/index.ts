@@ -28,7 +28,6 @@ import {
   McpConnectInputSchema,
   McpDiscoverInputSchema,
   McpDiscoverResultSchema,
-  McpOAuthPopupResultSchema,
   McpSourceConfigPayloadSchema,
   McpStartOAuthInputSchema,
   McpStartOAuthResultSchema,

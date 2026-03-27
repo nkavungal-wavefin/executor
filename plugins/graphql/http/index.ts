@@ -94,13 +94,6 @@ export const graphqlHttpApiExtension = {
 
 const GraphqlHttpApi = HttpApi.make("executor").add(GraphqlHttpGroup);
 
-const toBadRequestError = (operation: string, cause: unknown) =>
-  new ControlPlaneBadRequestError({
-    operation,
-    message: cause instanceof Error ? cause.message : String(cause),
-    details: cause instanceof Error ? cause.stack ?? cause.message : String(cause),
-  });
-
 const toStorageError = (operation: string, cause: unknown) =>
   new ControlPlaneStorageError({
     operation,

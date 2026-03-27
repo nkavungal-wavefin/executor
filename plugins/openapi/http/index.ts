@@ -28,7 +28,6 @@ import {
   OpenApiPreviewRequestSchema,
   OpenApiPreviewResponseSchema,
   OpenApiSourceConfigPayloadSchema,
-  OpenApiUpdateSourceInputSchema,
   type OpenApiConnectInput,
   type OpenApiPreviewRequest,
   type OpenApiPreviewResponse,

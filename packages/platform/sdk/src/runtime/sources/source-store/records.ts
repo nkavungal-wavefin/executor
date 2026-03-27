@@ -112,7 +112,7 @@ export const syncScopeSourceTypeDeclarationsWithDeps = (
   } = {},
 ): Effect.Effect<void, Error, never> =>
   Effect.gen(function* () {
-    const localScope = yield* resolveRuntimeLocalScopeFromDeps(
+    yield* resolveRuntimeLocalScopeFromDeps(
       deps,
       scopeId,
     );

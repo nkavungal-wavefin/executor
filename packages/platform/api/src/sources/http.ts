@@ -1,30 +1,10 @@
 import { HttpApiBuilder } from "@effect/platform";
-import type {
-  ExecutionInteraction,
-  Source,
-  ScopeId as WorkspaceId,
-} from "@executor/platform-sdk/schema";
 import * as Effect from "effect/Effect";
 
-import {
-  ControlPlaneBadRequestError,
-  ControlPlaneNotFoundError,
-  ControlPlaneStorageError,
-} from "../errors";
 import { ExecutorApi } from "../api";
 import {
-  getControlPlaneExecutor,
   resolveRequestedLocalWorkspace,
 } from "../local-context";
-
-const toBadRequestError = (operation: string, cause: unknown) => {
-  const message = cause instanceof Error ? cause.message : String(cause);
-  return new ControlPlaneBadRequestError({
-    operation,
-    message,
-    details: message,
-  });
-};
 
 export const ExecutorSourcesLive = HttpApiBuilder.group(
   ExecutorApi,

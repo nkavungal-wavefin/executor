@@ -11,6 +11,7 @@ import {
   defineExecutorSourcePlugin,
 } from "@executor/platform-sdk/plugins";
 import {
+  runtimeEffectError,
   SecretMaterialResolverService,
 } from "@executor/platform-sdk/runtime";
 import {
@@ -421,10 +422,9 @@ const fetchOpenApiDocument = (
         : conditionalResponse;
 
     if (!response.ok) {
-      return yield* Effect.fail(
-        new Error(
-          `Failed fetching OpenAPI spec (${response.status} ${response.statusText})`,
-        ),
+      return yield* runtimeEffectError(
+        "plugins/openapi/sdk",
+        `Failed fetching OpenAPI spec (${response.status} ${response.statusText})`,
       );
     }
 
@@ -579,8 +579,9 @@ export const openApiSdkPlugin = (
       invoke: (input) =>
         Effect.gen(function* () {
           if (input.stored === null) {
-            return yield* Effect.fail(
-              new Error(`OpenAPI source storage missing for ${input.source.id}`),
+            return yield* runtimeEffectError(
+              "plugins/openapi/sdk",
+              `OpenAPI source storage missing for ${input.source.id}`,
             );
           }
 
@@ -595,7 +596,7 @@ export const openApiSdkPlugin = (
             providerData.invocation,
           );
           const headers: Record<string, string> = {
-            ...(normalizedStored.defaultHeaders ?? {}),
+            ...normalizedStored.defaultHeaders,
           };
           const queryEntries: Array<{
             name: string;

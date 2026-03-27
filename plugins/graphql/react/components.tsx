@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { startTransition, useEffect, useState, type ReactNode } from "react";
 import type {
   Source,
   SourceInspectionToolDetail,
@@ -19,7 +19,6 @@ import {
 } from "@executor/react";
 import {
   Badge,
-  DocumentPanel,
   IconPencil,
   LoadableBlock,
   SourceToolDetailPanel,
