@@ -120,7 +120,7 @@ const ExecutionRow = (props: {
         <span className="text-muted-foreground/60">status:</span>
         <span className={statusText(execution.status)}>{execution.status.replaceAll("_", " ")}</span>
       </span>
-      <span className="inline-flex w-[110px] shrink-0">
+      <span className="inline-flex w-[150px] shrink-0">
         <span className="text-muted-foreground/60">duration_ms:</span>{" "}
         <span className={durationMs && Number(durationMs.replace(/,/g, "")) > 5000 ? "text-destructive" : "text-primary"}>{durationMs ?? "—"}</span>
       </span>
