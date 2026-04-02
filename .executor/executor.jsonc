@@ -59,6 +59,12 @@
       "action": "allow",
       "approval": "auto",
       "priority": 10
+    },
+    "demo.run-rake-task": {
+      "match": "demo.run-rake-task",
+      "action": "allow",
+      "approval": "manual",
+      "priority": 10
     }
   }
 }
