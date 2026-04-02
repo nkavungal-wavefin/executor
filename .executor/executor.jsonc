@@ -306,7 +306,7 @@
         "cloudBaseUrl": "waveaccounting.atlassian.net",
         "auth": {
           "kind": "basic",
-          "email": "acholmondeley@waveapps.com",
+          "email": "REPLACE_WITH_WAVE_EMAIL",
           "apiTokenRef": {
             "secretId": "sec_f8531c78-96bf-4024-86a7-1a4fb22e1a61"
           }
