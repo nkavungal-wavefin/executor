@@ -3,6 +3,26 @@
     "local-tools": {
       "name": "Local Tools",
       "kind": "local-tools"
+    },
+    "wave-mcp-coral": {
+      "name": "Wave MCP - Coral",
+      "namespace": "wave.mcp.coral",
+      "kind": "mcp",
+      "config": {
+        "endpoint": "http://127.0.0.1:5555/mcp",
+        "transport": "streamable-http",
+        "queryParams": null,
+        "headers": {
+          "Accept": "application/json, text/event-stream"
+        },
+        "command": null,
+        "args": null,
+        "env": null,
+        "cwd": null,
+        "auth": {
+          "kind": "none"
+        }
+      }
     }
   },
   "policies": {
