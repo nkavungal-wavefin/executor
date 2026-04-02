@@ -1,25 +1,20 @@
 {
   "sources": {
-    "vercel": {
-      "name": "Vercel API",
-      "config": {
-        "specUrl": "https://openapi.vercel.sh/",
-        "baseUrl": "https://api.vercel.com/",
-        "auth": {
-          "kind": "none"
-        },
-        "defaultHeaders": null
-      },
-      "kind": "openapi"
+    "local-tools": {
+      "name": "Local Tools",
+      "kind": "local-tools"
     },
-    "deepwiki-mcp": {
-      "name": "DeepWiki MCP",
-      "namespace": "deepwiki.mcp",
+    "wave-mcp-coral": {
+      "name": "Wave MCP - Coral",
+      "namespace": "wave.mcp.coral",
+      "kind": "mcp",
       "config": {
-        "endpoint": "https://mcp.deepwiki.com/mcp",
-        "transport": "auto",
+        "endpoint": "http://127.0.0.1:5555/mcp",
+        "transport": "streamable-http",
         "queryParams": null,
-        "headers": null,
+        "headers": {
+          "Accept": "application/json, text/event-stream"
+        },
         "command": null,
         "args": null,
         "env": null,
@@ -27,8 +22,7 @@
         "auth": {
           "kind": "none"
         }
-      },
-      "kind": "mcp"
+      }
     },
     "linear-graphql": {
       "name": "Linear GraphQL",
@@ -323,9 +317,27 @@
         "enableConfluence": true
       },
       "kind": "atlassian"
-    }
+      }
   },
   "policies": {
+    "demo.echo": {
+      "match": "demo.echo",
+      "action": "allow",
+      "approval": "auto",
+      "priority": 30
+    },
+    "demo.approve": {
+      "match": "demo.approve",
+      "action": "allow",
+      "approval": "manual",
+      "priority": 30
+    },
+    "demo.confirm": {
+      "match": "demo.confirm",
+      "action": "allow",
+      "approval": "auto",
+      "priority": 30
+    },
     "linear.graphql.agentActivities": {
       "match": "linear.graphql.agentActivities",
       "action": "allow",
@@ -364,6 +376,12 @@
     },
     "confluence.fact.page.get": {
       "match": "confluence.fact.page.get",
+      "action": "allow",
+      "approval": "manual",
+      "priority": 10
+    },
+    "demo.run-rake-task": {
+      "match": "demo.run-rake-task",
       "action": "allow",
       "approval": "manual",
       "priority": 10

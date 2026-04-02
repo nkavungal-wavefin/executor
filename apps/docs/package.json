@@ -4,9 +4,12 @@
   "type": "module",
   "scripts": {
     "predev": "npm install --prefix ./.sharp-cache --os=darwin --cpu=x64 --ignore-scripts sharp@0.33.5 --silent",
-    "dev": "NODE_PATH=$PWD/.sharp-cache/node_modules bunx mint dev --no-open --port 3337",
+    "dev": "bunx mintlify dev --no-open --port 3337",
     "typecheck": "echo 'No typecheck for @executor/docs'",
-    "validate": "NODE_PATH=$PWD/.sharp-cache/node_modules bunx mint validate"
+    "validate": "bunx mintlify validate"
   },
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "devDependencies": {
+    "mintlify": "^4.2.466"
+  }
 }

@@ -12,6 +12,9 @@ import {
   GraphqlReactPlugin,
 } from "@executor/plugin-graphql-react";
 import {
+  LocalToolsReactPlugin,
+} from "@executor/plugin-local-tools-react";
+import {
   McpReactPlugin,
 } from "@executor/plugin-mcp-react";
 import {
@@ -30,6 +33,7 @@ import { getFallbackSourceFaviconUrl } from "../lib/source-favicon";
 
 const frontendPlugins = [
   ExecutionHistoryReactPlugin,
+  LocalToolsReactPlugin,
   McpReactPlugin,
   GraphqlReactPlugin,
   GoogleDiscoveryReactPlugin,
