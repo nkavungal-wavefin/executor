@@ -24,6 +24,9 @@ import {
   AtlassianReactPlugin,
 } from "@executor/plugin-atlassian-react";
 import {
+  DatadogReactPlugin,
+} from "@executor/plugin-datadog-react";
+import {
   createExecutorPluginPaths,
   createSourcePluginPaths,
   registerExecutorFrontendPlugins,
@@ -39,6 +42,7 @@ const frontendPlugins = [
   GoogleDiscoveryReactPlugin,
   OpenApiReactPlugin,
   AtlassianReactPlugin,
+  DatadogReactPlugin,
 ] as const satisfies readonly ExecutorFrontendPlugin[];
 
 const frontendPluginRegistry = registerExecutorFrontendPlugins(frontendPlugins);

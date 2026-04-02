@@ -1,0 +1,25 @@
+{
+  "name": "@executor/plugin-datadog-http",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "files": [
+    "*.ts"
+  ],
+  "dependencies": {
+    "@effect/platform": "catalog:",
+    "@executor/platform-api": "workspace:*",
+    "@executor/platform-sdk": "workspace:*",
+    "@executor/plugin-datadog-shared": "workspace:*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "vitest": "catalog:"
+  },
+  "version": "0.0.0"
+}

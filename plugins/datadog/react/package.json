@@ -1,0 +1,26 @@
+{
+  "name": "@executor/plugin-datadog-react",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.tsx"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "files": [
+    "*.ts",
+    "*.tsx"
+  ],
+  "dependencies": {
+    "@executor/plugin-datadog-shared": "workspace:*",
+    "@executor/react": "workspace:*",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^14.0.0",
+    "@testing-library/user-event": "^14.5.1",
+    "vitest": "catalog:"
+  },
+  "version": "0.0.0"
+}

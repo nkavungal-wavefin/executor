@@ -3,7 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "predev": "npm install --prefix ./.sharp-cache --os=darwin --cpu=x64 --ignore-scripts sharp@0.33.5 --silent",
     "dev": "bunx mintlify dev --no-open --port 3337",
     "typecheck": "echo 'No typecheck for @executor/docs'",
     "validate": "bunx mintlify validate"

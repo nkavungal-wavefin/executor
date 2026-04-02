@@ -308,7 +308,7 @@
           "kind": "basic",
           "email": "REPLACE_WITH_WAVE_EMAIL",
           "apiTokenRef": {
-            "secretId": "sec_f8531c78-96bf-4024-86a7-1a4fb22e1a61"
+            "secretId": "REPLACE_WITH_WAVE_API_TOKEN_SECRET_ID"
           }
         },
         "allowedProjects": ["PMT"],
@@ -317,7 +317,23 @@
         "enableConfluence": true
       },
       "kind": "atlassian"
-      }
+    },
+    "wave-datadog": {
+      "name": "Wave Datadog MCP",
+      "namespace": "datadog",
+      "config": {
+        "auth": {
+          "kind": "api-key",
+          "apiKeyRef": {
+            "secretId": "sec_3c8d3c77-c3ac-4aa1-8f19-697a54185874"
+          },
+          "appKeyRef": {
+            "secretId": "REPLACE_WITH_DATADOG_APP_KEY_SECRET_ID"
+          }
+        }
+      },
+      "kind": "datadog"
+    }
   },
   "policies": {
     "demo.echo": {

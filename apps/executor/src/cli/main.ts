@@ -2,6 +2,7 @@ import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { dirname } from "node:path";
 import { createInterface } from "node:readline/promises";
+
 import { FileSystem } from "@effect/platform";
 import { Args, Command, Options } from "@effect/cli";
 import {
@@ -39,6 +40,9 @@ import {
   atlassianSdkPlugin,
 } from "@executor/plugin-atlassian-sdk";
 import {
+  datadogSdkPlugin,
+} from "@executor/plugin-datadog-sdk";
+import {
   getExecutorInternalToolHelpLines,
   RuntimeExecutionResolverService,
 } from "@executor/platform-sdk/runtime";
@@ -72,6 +76,7 @@ import {
   createFileMcpSourceStorage,
   createFileOpenApiSourceStorage,
   createFileAtlassianSourceStorage,
+  createFileDatadogSourceStorage,
   createLocalExecutorServer,
   DEFAULT_SERVER_BASE_URL,
   DEFAULT_SERVER_HOST,
@@ -363,6 +368,11 @@ const loadRunWorkflowText = (): Effect.Effect<string, Error, never> =>
         atlassianSdkPlugin({
           storage: createFileAtlassianSourceStorage({
             rootDir: `${CLI_LOCAL_DATA_DIR}/plugins/atlassian/sources`,
+          }),
+        }),
+        datadogSdkPlugin({
+          storage: createFileDatadogSourceStorage({
+            rootDir: `${CLI_LOCAL_DATA_DIR}/plugins/datadog/sources`,
           }),
         }),
       ] as const,

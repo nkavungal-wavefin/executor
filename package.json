@@ -22,6 +22,7 @@
     "zod": "^4.3.6"
   },
   "scripts": {
+    "postinstall": "bun add --save-optional --os=darwin --cpu=x64 sharp 2>/dev/null || echo 'Sharp x64 binaries ensured'",
     "dev": "turbo run dev",
     "trace:up": "docker compose -f compose.tracing.yaml up -d",
     "trace:down": "docker compose -f compose.tracing.yaml down",

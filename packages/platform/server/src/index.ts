@@ -25,6 +25,10 @@ import {
 import {
   openApiSdkPlugin,
 } from "@executor/plugin-openapi-sdk";
+import { datadogHttpPlugin } from "@executor/plugin-datadog-http";
+import {
+  datadogSdkPlugin,
+} from "@executor/plugin-datadog-sdk";
 import {
   createExecutorApiLayer,
 } from "@executor/platform-api/http";
@@ -67,6 +71,7 @@ import { createFileMcpOAuthSessionStorage } from "./mcp-oauth-session-storage";
 import { createFileMcpSourceStorage } from "./mcp-source-storage";
 import { createFileOpenApiSourceStorage } from "./openapi-source-storage";
 import { createFileAtlassianSourceStorage } from "./atlassian-source-storage";
+import { createFileDatadogSourceStorage } from "./datadog-source-storage";
 
 export { createFileGoogleDiscoveryOAuthSessionStorage } from "./google-discovery-oauth-session-storage";
 export { createFileGoogleDiscoverySourceStorage } from "./google-discovery-source-storage";
@@ -75,6 +80,7 @@ export { createFileMcpOAuthSessionStorage } from "./mcp-oauth-session-storage";
 export { createFileMcpSourceStorage } from "./mcp-source-storage";
 export { createFileOpenApiSourceStorage } from "./openapi-source-storage";
 export { createFileAtlassianSourceStorage } from "./atlassian-source-storage";
+export { createFileDatadogSourceStorage } from "./datadog-source-storage";
 
 export {
   DEFAULT_EXECUTOR_DATA_DIR,
@@ -144,6 +150,7 @@ const executorHttpPlugins = [
   mcpHttpPlugin(),
   openApiHttpPlugin(),
   atlassianHttpPlugin(),
+  datadogHttpPlugin(),
 ] as const;
 
 const disposeExecutor = (executor: Executor) =>
@@ -197,6 +204,11 @@ const createExecutorRuntime = (
       atlassianSdkPlugin({
         storage: createFileAtlassianSourceStorage({
           rootDir: resolve(localDataDir, "plugins", "atlassian", "sources"),
+        }),
+      }),
+      datadogSdkPlugin({
+        storage: createFileDatadogSourceStorage({
+          rootDir: resolve(localDataDir, "plugins", "datadog", "sources"),
         }),
       }),
     ] as const,

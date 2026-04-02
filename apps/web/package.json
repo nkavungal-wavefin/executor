@@ -18,6 +18,7 @@
     "@executor/plugin-onepassword-react": "workspace:*",
     "@executor/plugin-openapi-react": "workspace:*",
     "@executor/plugin-atlassian-react": "workspace:*",
+    "@executor/plugin-datadog-react": "workspace:*",
     "@executor/react": "workspace:*",
     "@executor/server": "workspace:*",
     "@executor/source-core": "workspace:*",
