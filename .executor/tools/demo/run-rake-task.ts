@@ -1,44 +1,21 @@
 import { spawnSync } from "node:child_process";
+import * as Schema from "effect/Schema";
 
 const OKTETO_CONTAINER = "payroll-devcontainer-only";
 const OKTETO_NAMESPACE = "slee";
 const OKTETO_CWD = "/Users/slee/wave/src/payroll";
 
-const inputSchema = {
-  type: "object" as const,
-  properties: {
-    task: {
-      type: "string" as const,
+const inputSchema = Schema.standardSchemaV1(
+  Schema.Struct({
+    task: Schema.String.annotations({
       description:
-        "The rake task name to run (e.g. 'spec' or 'payroll:bank_account:disconnect')",
-    },
-    args: {
-      type: "string" as const,
-      description: "Optional space-separated extra arguments to pass after the task name",
-    },
-  },
-  required: ["task"] as const,
-  additionalProperties: false,
-  "~standard": {
-    version: 1 as const,
-    vendor: "local",
-    validate(value: unknown) {
-      if (typeof value !== "object" || value === null) {
-        return { issues: [{ message: "Expected an object" }] };
-      }
-      const v = value as Record<string, unknown>;
-      if (typeof v["task"] !== "string" || v["task"].trim().length === 0) {
-        return { issues: [{ message: "task must be a non-empty string" }] };
-      }
-      return {
-        value: {
-          task: (v["task"] as string).trim(),
-          args: typeof v["args"] === "string" ? v["args"].trim() : undefined,
-        },
-      };
-    },
-  },
-};
+        "The rake task name to run (e.g. 'spec' or 'payroll:bank_account:disconnect'). Use '--tasks' to list all available tasks.",
+    }),
+    args: Schema.optional(Schema.String).annotations({
+      description: "Optional space-separated extra arguments to pass after the task name (e.g. 'BUSINESS_ID=abc123')",
+    }),
+  }),
+);
 
 export const tool = {
   tool: {
@@ -86,6 +63,6 @@ export const tool = {
     },
   },
   metadata: {
-    interaction: "required" as const,
+    interaction: "auto" as const,
   },
 };

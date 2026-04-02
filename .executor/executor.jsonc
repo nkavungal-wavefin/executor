@@ -385,6 +385,72 @@
       "action": "allow",
       "approval": "manual",
       "priority": 10
+    },
+    "atlassian.mcp.addcommenttojiraissue": {
+      "match": "atlassian.mcp.addcommenttojiraissue",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.addworklogtojiraissue": {
+      "match": "atlassian.mcp.addworklogtojiraissue",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.atlassianuserinfo": {
+      "match": "atlassian.mcp.atlassianuserinfo",
+      "action": "allow",
+      "approval": "manual",
+      "priority": 10
+    },
+    "atlassian.mcp.createconfluencefootercomment": {
+      "match": "atlassian.mcp.createconfluencefootercomment",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.createconfluenceinlinecomment": {
+      "match": "atlassian.mcp.createconfluenceinlinecomment",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.createconfluencepage": {
+      "match": "atlassian.mcp.createconfluencepage",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.createissuelink": {
+      "match": "atlassian.mcp.createissuelink",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.createjiraissue": {
+      "match": "atlassian.mcp.createjiraissue",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.editjiraissue": {
+      "match": "atlassian.mcp.editjiraissue",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.transitionjiraissue": {
+      "match": "atlassian.mcp.transitionjiraissue",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
+    },
+    "atlassian.mcp.updateconfluencepage": {
+      "match": "atlassian.mcp.updateconfluencepage",
+      "action": "deny",
+      "approval": "auto",
+      "priority": 10
     }
   }
 }
