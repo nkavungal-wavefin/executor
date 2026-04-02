@@ -3,9 +3,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun mint dev --no-open --port 3337",
+    "dev": "bunx mintlify dev --no-open --port 3337",
     "typecheck": "echo 'No typecheck for @executor/docs'",
-    "validate": "bunx --bun mint validate"
+    "validate": "bunx mintlify validate"
   },
-  "version": "0.0.0"
+  "version": "0.0.0",
+  "devDependencies": {
+    "mintlify": "^4.2.466"
+  }
 }
