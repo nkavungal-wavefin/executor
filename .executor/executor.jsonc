@@ -270,7 +270,6 @@
     "google-gmail": {
       "name": "Gmail",
       "namespace": "google.gmail",
-      "kind": "google_discovery",
       "config": {
         "service": "gmail",
         "version": "v1",
@@ -303,7 +302,27 @@
           },
           "expiresAt": 1774859675319
         }
-      }
+      },
+      "kind": "google_discovery"
+    },
+    "wave-atlassian": {
+      "name": "Wave Atlassian MCP",
+      "namespace": "waveaccounting",
+      "config": {
+        "cloudBaseUrl": "waveaccounting.atlassian.net",
+        "auth": {
+          "kind": "basic",
+          "email": "acholmondeley@waveapps.com",
+          "apiTokenRef": {
+            "secretId": "sec_f8531c78-96bf-4024-86a7-1a4fb22e1a61"
+          }
+        },
+        "allowedProjects": ["PMT"],
+        "allowedSpaces": ["FACT"],
+        "enableJira": true,
+        "enableConfluence": true
+      },
+      "kind": "atlassian"
     }
   },
   "policies": {
@@ -341,6 +360,12 @@
       "match": "vercel.dns.updateRecord",
       "action": "allow",
       "approval": "auto",
+      "priority": 10
+    },
+    "confluence.fact.page.get": {
+      "match": "confluence.fact.page.get",
+      "action": "allow",
+      "approval": "manual",
       "priority": 10
     }
   }

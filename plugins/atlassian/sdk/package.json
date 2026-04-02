@@ -1,0 +1,30 @@
+{
+  "name": "@executor/plugin-atlassian-sdk",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts"
+  },
+  "files": [
+    "*.ts"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "bunx tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@executor/ir": "workspace:*",
+    "@executor/platform-sdk": "workspace:*",
+    "@executor/plugin-atlassian-shared": "workspace:*",
+    "@executor/source-core": "workspace:*",
+    "effect": "catalog:"
+  },
+  "devDependencies": {
+    "@effect/vitest": "catalog:",
+    "@types/node": "catalog:",
+    "bun-types": "catalog:",
+    "vitest": "catalog:"
+  },
+  "version": "0.0.0"
+}

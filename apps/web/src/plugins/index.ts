@@ -18,6 +18,9 @@ import {
   OpenApiReactPlugin,
 } from "@executor/plugin-openapi-react";
 import {
+  AtlassianReactPlugin,
+} from "@executor/plugin-atlassian-react";
+import {
   createExecutorPluginPaths,
   createSourcePluginPaths,
   registerExecutorFrontendPlugins,
@@ -31,6 +34,7 @@ const frontendPlugins = [
   GraphqlReactPlugin,
   GoogleDiscoveryReactPlugin,
   OpenApiReactPlugin,
+  AtlassianReactPlugin,
 ] as const satisfies readonly ExecutorFrontendPlugin[];
 
 const frontendPluginRegistry = registerExecutorFrontendPlugins(frontendPlugins);

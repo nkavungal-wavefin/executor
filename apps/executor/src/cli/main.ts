@@ -36,6 +36,9 @@ import {
   openApiSdkPlugin,
 } from "@executor/plugin-openapi-sdk";
 import {
+  atlassianSdkPlugin,
+} from "@executor/plugin-atlassian-sdk";
+import {
   getExecutorInternalToolHelpLines,
   RuntimeExecutionResolverService,
 } from "@executor/platform-sdk/runtime";
@@ -68,6 +71,7 @@ import {
   createFileMcpOAuthSessionStorage,
   createFileMcpSourceStorage,
   createFileOpenApiSourceStorage,
+  createFileAtlassianSourceStorage,
   createLocalExecutorServer,
   DEFAULT_SERVER_BASE_URL,
   DEFAULT_SERVER_HOST,
@@ -354,6 +358,11 @@ const loadRunWorkflowText = (): Effect.Effect<string, Error, never> =>
         openApiSdkPlugin({
           storage: createFileOpenApiSourceStorage({
             rootDir: `${CLI_LOCAL_DATA_DIR}/plugins/openapi/sources`,
+          }),
+        }),
+        atlassianSdkPlugin({
+          storage: createFileAtlassianSourceStorage({
+            rootDir: `${CLI_LOCAL_DATA_DIR}/plugins/atlassian/sources`,
           }),
         }),
       ] as const,

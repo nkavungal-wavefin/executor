@@ -3,9 +3,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "bunx --bun mint dev --no-open --port 3337",
+    "predev": "npm install --prefix ./.sharp-cache --os=darwin --cpu=x64 --ignore-scripts sharp@0.33.5 --silent",
+    "dev": "NODE_PATH=$PWD/.sharp-cache/node_modules bunx mint dev --no-open --port 3337",
     "typecheck": "echo 'No typecheck for @executor/docs'",
-    "validate": "bunx --bun mint validate"
+    "validate": "NODE_PATH=$PWD/.sharp-cache/node_modules bunx mint validate"
   },
   "version": "0.0.0"
 }

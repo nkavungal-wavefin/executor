@@ -88,3 +88,4 @@ personal-notes/
 executor/.env.executor-push
 ignored/
 agent-notes/
+.sharp-cache

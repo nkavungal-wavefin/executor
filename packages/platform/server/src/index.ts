@@ -18,6 +18,10 @@ import { localToolsSdkPlugin } from "@executor/plugin-local-tools-sdk";
 import { mcpHttpPlugin } from "@executor/plugin-mcp-http";
 import { mcpSdkPlugin } from "@executor/plugin-mcp-sdk";
 import { openApiHttpPlugin } from "@executor/plugin-openapi-http";
+import { atlassianHttpPlugin } from "@executor/plugin-atlassian-http";
+import {
+  atlassianSdkPlugin,
+} from "@executor/plugin-atlassian-sdk";
 import {
   openApiSdkPlugin,
 } from "@executor/plugin-openapi-sdk";
@@ -62,6 +66,7 @@ import { createFileGraphqlSourceStorage } from "./graphql-source-storage";
 import { createFileMcpOAuthSessionStorage } from "./mcp-oauth-session-storage";
 import { createFileMcpSourceStorage } from "./mcp-source-storage";
 import { createFileOpenApiSourceStorage } from "./openapi-source-storage";
+import { createFileAtlassianSourceStorage } from "./atlassian-source-storage";
 
 export { createFileGoogleDiscoveryOAuthSessionStorage } from "./google-discovery-oauth-session-storage";
 export { createFileGoogleDiscoverySourceStorage } from "./google-discovery-source-storage";
@@ -69,6 +74,7 @@ export { createFileGraphqlSourceStorage } from "./graphql-source-storage";
 export { createFileMcpOAuthSessionStorage } from "./mcp-oauth-session-storage";
 export { createFileMcpSourceStorage } from "./mcp-source-storage";
 export { createFileOpenApiSourceStorage } from "./openapi-source-storage";
+export { createFileAtlassianSourceStorage } from "./atlassian-source-storage";
 
 export {
   DEFAULT_EXECUTOR_DATA_DIR,
@@ -137,6 +143,7 @@ const executorHttpPlugins = [
   googleDiscoveryHttpPlugin(),
   mcpHttpPlugin(),
   openApiHttpPlugin(),
+  atlassianHttpPlugin(),
 ] as const;
 
 const disposeExecutor = (executor: Executor) =>
@@ -185,6 +192,11 @@ const createExecutorRuntime = (
       openApiSdkPlugin({
         storage: createFileOpenApiSourceStorage({
           rootDir: resolve(localDataDir, "plugins", "openapi", "sources"),
+        }),
+      }),
+      atlassianSdkPlugin({
+        storage: createFileAtlassianSourceStorage({
+          rootDir: resolve(localDataDir, "plugins", "atlassian", "sources"),
         }),
       }),
     ] as const,
